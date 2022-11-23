@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_recite"
+        android:icon="@drawable/icon_recite"
+        android:title="背单词"/>
+
+    <item
+
+        android:id=" @+id/navigation_review"
+        android:icon="@drawable/icon_brush"
+        android:title="快速复习"/>
+
+    <item
+        android:id="@+id/navigation_fight"
+        android:icon="@drawable/icon_fight"
+        android:title="PK"/>
+
+    <item
+        android:id="@+id/navigation_wrong"
+        android:icon="@drawable/icon_collect"
+        android:title="收藏夹"
+        />
+
+
+
+
+</menu>
