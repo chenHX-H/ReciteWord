@@ -6,7 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+
+import com.example.reciteword.dao.DataUtil;
+import com.example.reciteword.dao.WordDataOpenHelper;
 
 import org.apache.http.util.EncodingUtils;
 import org.json.JSONArray;
@@ -24,8 +28,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Data.initWordList();
+//        Data.initWordList();
+        DataUtil.init(getApplicationContext());
         Intent intent = new Intent(MainActivity.this,InterfaceActivity.class);
         startActivity(intent);
     }
+
 }

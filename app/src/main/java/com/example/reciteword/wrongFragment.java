@@ -11,6 +11,7 @@ import android.widget.ListView;
 import androidx.fragment.app.Fragment;
 
 import com.example.reciteword.adapter.WordAdapter;
+import com.example.reciteword.dao.DataUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,7 +38,7 @@ public class wrongFragment extends Fragment {
             collects=new HashSet<String>();
         }
         for (String collect : collects) {
-            wordList.add(Data.getWordInstanceByName(collect));
+            wordList.add(DataUtil.getWordInstance(collect));
         }
 
         WordAdapter adapter = new WordAdapter(getActivity(), R.layout.word_item, wordList);

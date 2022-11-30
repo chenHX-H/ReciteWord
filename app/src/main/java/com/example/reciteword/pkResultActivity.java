@@ -62,7 +62,6 @@ public class pkResultActivity extends AppCompatActivity {
                 sync_collect_data();
                 finish();
                 fightFragment.isReturnFlag=true;
-
             }
         });
         return_home_btn.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +80,8 @@ public class pkResultActivity extends AppCompatActivity {
     }
 
     private void sync_collect_data() {
-        SharedPreferences collectBookPre = getSharedPreferences("collectBook", Context.MODE_PRIVATE);
+        SharedPreferences collectBookPre =
+                getSharedPreferences("collectBook", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = collectBookPre.edit();
         //取出原数据，并浅拷贝
         Set<String> collects = collectBookPre.getStringSet("collects", null);
@@ -96,10 +96,8 @@ public class pkResultActivity extends AppCompatActivity {
         }
         //清空临时变量区
         set.clear();
-
         editor.putStringSet("collects", newCollects);
         editor.apply();
-
     }
 }
 

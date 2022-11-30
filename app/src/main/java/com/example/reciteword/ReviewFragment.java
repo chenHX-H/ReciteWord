@@ -1,12 +1,7 @@
 package com.example.reciteword;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,12 +16,9 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
+import com.example.reciteword.dao.DataUtil;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +29,7 @@ public class ReviewFragment extends Fragment {
     private Boolean isShowMeaning = true;
     private Word currentWord = null;
     MediaPlayer m1=null,m2=null;
+    Switch sb = null;
 
 
 
@@ -59,11 +52,10 @@ public class ReviewFragment extends Fragment {
         // TODO: Use the ViewModel
         System.out.println("-----------onActivityCreated");
         initEvent();
-        Data.currentOrder--;
-        if(Data.currentOrder<0){
-            Data.currentOrder=0;
+        DataUtil.currentOrder_Review--;
+        if(DataUtil.currentOrder_Review<0){
+            DataUtil.currentOrder_Review=0;
         }
-        getSentence_meaning();
         play_loop();
 
     }
@@ -75,6 +67,7 @@ public class ReviewFragment extends Fragment {
 
     public void initEvent() {
         ImageButton isShowMeaning_IB = getActivity().findViewById(R.id.sentence_meaning_show);
+        sb=getActivity().findViewById(R.id.soundsSwitch);
         isShowMeaning_IB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,7 +76,6 @@ public class ReviewFragment extends Fragment {
                 System.out.println("ImageButton-Hide = " + isShowMeaning);
             }
         });
-        Switch sb = getActivity().findViewById(R.id.soundsSwitch);
         sb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -93,7 +85,6 @@ public class ReviewFragment extends Fragment {
                     }
                     if (m1!=null){
                         m2.setVolume(1,1);
-
                     }
                 } else {
                     if (m1!=null){
@@ -108,7 +99,7 @@ public class ReviewFragment extends Fragment {
 
     }
     public void checkVolum(){
-        Switch sb = getActivity().findViewById(R.id.soundsSwitch);
+//        Switch sb = requireActivity().findViewById(R.id.soundsSwitch);
         if (sb.isChecked()) {
             if (m1 !=null){
                 m1.setVolume(1,1);
@@ -132,14 +123,14 @@ public class ReviewFragment extends Fragment {
             @Override
             public void run() {
 
-                while (Data.currentOrder <= 90) {
-                    if (Data.currentOrder == 90) {
-                        Data.currentOrder = 0;
+                while (DataUtil.currentOrder_Review <= DataUtil.currentWordNum) {
+                    if (DataUtil.currentOrder_Review == DataUtil.currentWordNum) {
+                        DataUtil.currentOrder_Review = 0;
                     }
                     if (!isAdded()) {
                         continue;
                     }
-                    Word wordInstance = Data.getWordInstance(Data.currentOrder);
+                    Word wordInstance = DataUtil.getWordInstanceById(DataUtil.currentOrder_Review);
                     currentWord = wordInstance;
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -162,10 +153,7 @@ public class ReviewFragment extends Fragment {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    Data.currentOrder++;
-                    if(Data.currentOrder>=90){
-                        Data.currentOrder=0;
-                    }
+                  DataUtil.currentOrder_Review=DataUtil.getRandNum(DataUtil.currentWordNum);
                 }
 
             }
@@ -185,48 +173,26 @@ public class ReviewFragment extends Fragment {
         TextView tv_sentence_mean = getActivity().findViewById(R.id.sentence_meaning);
 
 
-        String d = (String) sentenceData.get(word.getWord());
-        String sentence = d.split("=")[0];
-        String sentence_meaning = d.split("=")[1];
+
 
         tv_word.setText(word.getWord());
-        tv_soundmark.setText(word.getPron());
+        tv_soundmark.setText(word.getPronounce());
         tv_mean.setText(word.getDefinition());
-        tv_sentence.setText(sentence);
+        tv_sentence.setText(word.getSentence_en());
         if (!isShowMeaning) {
             tv_sentence_mean.setText("*************");
         } else {
-            tv_sentence_mean.setText(sentence_meaning);
+            tv_sentence_mean.setText(word.getSentence_zh());
         }
 
 
     }
 
-    private void getSentence_meaning() {
-        AssetManager am = getResources().getAssets();
-        try {
-            InputStream is = am.open("word_sentence.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            while (reader.ready()) {
-                String s = reader.readLine();
-                String[] list = s.split("=");
-                sentenceData.put(list[0], list[1] + '=' + list[2]);
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(sentenceData.get("terror"));
-
-    }
 
     public void playAudio(String word) {
         MediaPlayer mediaPlayer_audio =m1= new MediaPlayer();
         checkVolum();
         AssetFileDescriptor fd = null;
-
-
         try {
             fd = getResources().getAssets().openFd("audio/" + word + ".mp3");
             mediaPlayer_audio.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
@@ -242,17 +208,17 @@ public class ReviewFragment extends Fragment {
     public void playAudio_sentence(String word) {
         MediaPlayer mediaPlayer_sentence =m2= new MediaPlayer();
         checkVolum();
-
         AssetFileDescriptor fd = null;
-
         try {
-            fd = getResources().getAssets().openFd("sentence_audio/" + word + ".mp3");
-            mediaPlayer_sentence.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
-            mediaPlayer_sentence.prepare();
+            if(isAdded()){
+                fd = getResources().getAssets().openFd("sentence_audio/" + word + ".mp3");
+                mediaPlayer_sentence.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
+                mediaPlayer_sentence.prepare();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         mediaPlayer_sentence.start();
     }
 

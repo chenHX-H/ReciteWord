@@ -16,11 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.reciteword.Data;
 import com.example.reciteword.R;
 import com.example.reciteword.Word;
+import com.example.reciteword.dao.DataUtil;
 
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +32,6 @@ public class ErrorAdapter extends ArrayAdapter<String> {
     public ErrorAdapter(Context context, int textViewResourceId, List<String> data) {
         super(context, textViewResourceId, data);
         resourceId = textViewResourceId;
-
     }
 
     @Override
@@ -41,7 +39,7 @@ public class ErrorAdapter extends ArrayAdapter<String> {
         View view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);
         ;
         System.out.println("---------------------:::" + position);
-        Word word = Data.getWordInstanceByName(getItem(position));
+        Word word = DataUtil.getWordInstance(getItem(position));
 //        Word word = getItem(position);
         TextView error_word_TV = view.findViewById(R.id.error_word_TV);
         TextView error_word_mean_TV = view.findViewById(R.id.error_word_mean_TV);
@@ -64,7 +62,5 @@ public class ErrorAdapter extends ArrayAdapter<String> {
         });
         return view;
     }
-
-
 }
 

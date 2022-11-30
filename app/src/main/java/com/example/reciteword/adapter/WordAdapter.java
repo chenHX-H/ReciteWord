@@ -10,9 +10,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.reciteword.Data;
 import com.example.reciteword.R;
 import com.example.reciteword.Word;
+import com.example.reciteword.dao.DataUtil;
 
 import java.util.HashSet;
 import java.util.List;
@@ -65,7 +65,7 @@ public class WordAdapter extends ArrayAdapter<Word> {
         //更新数据源
         this.data.clear();
         for (String collect : newCollects) {
-            this.data.add(Data.getWordInstanceByName(collect));
+            this.data.add(DataUtil.getWordInstance(collect));
         }
 
         this.notifyDataSetChanged(); //调用adapter的方法刷新

@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.reciteword.dao.DataUtil;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,11 +40,12 @@ public class reciteFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         knowButton = (Button) getActivity().findViewById(R.id.knowButton);
         unknowButton = (Button) getActivity().findViewById(R.id.unknowButton);
-        tipsButton = (ImageButton) getActivity().findViewById(R.id.tipsButton);
+//        tipsButton = (ImageButton) getActivity().findViewById(R.id.tipsButton);
         wordText = (TextView) getActivity().findViewById(R.id.wordText);
         definitionText = (TextView) getActivity().findViewById(R.id.definitionText);
 
-        wordText.setText(Data.getWord(Data.getRandNum()));
+        wordText.setText(DataUtil.getWordInstanceById(DataUtil.currentOrder).getWord());
+        System.out.println("测试测试:"+wordText.getText().toString());
         definitionText.setText("");
 
         knowButton.setOnClickListener(new View.OnClickListener() {
@@ -51,18 +54,24 @@ public class reciteFragment extends Fragment {
 
                 knowButton.setText("认识");
                 unknowButton.setText("不认识");
-                NoKnowWord=false;
-                Data.setRandNum();
+                NoKnowWord = false;
+//                Data.setRandNum();
+                DataUtil.currentOrder++;
                 definitionText.setText("");
-
-                wordText.setText(Data.getWord(Data.getRandNum()));
+                if (DataUtil.currentOrder >= DataUtil.currentWordNum) {
+                    DataUtil.currentOrder = 0;
+                }
+                wordText.setText(DataUtil.getWordInstanceById(DataUtil.currentOrder).getWord());
 
             }
         });
         unknowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                definitionText.setText(Data.getPron(Data.getRandNum()) + "\n" + Data.getwordDefine(Data.getRandNum()));
+//                definitionText.setText(Data.getPron(Data.getRandNum()) + "\n" + Data.getwordDefine(Data.getRandNum()));
+                Word word = DataUtil.getWordInstanceById(DataUtil.currentOrder);
+                String str=word.getPronounce()+"\n"+word.getDefinition();
+                definitionText.setText(str);
                 if (!NoKnowWord) {
                     unknowButton.setText("收藏单词");
                     knowButton.setText("下一个");
@@ -72,35 +81,42 @@ public class reciteFragment extends Fragment {
 
                 knowButton.setText("认识");
                 unknowButton.setText("不认识");
-                NoKnowWord=false;
+                NoKnowWord = false;
 
                 //加入收藏本
                 addWordIntoCollects(wordText.getText().toString());
-                Data.setRandNum();
+//                Data.setRandNum();
                 definitionText.setText("");
-                wordText.setText(Data.getWord(Data.getRandNum()));
+                DataUtil.currentOrder++;
+                if(DataUtil.currentOrder>=DataUtil.currentWordNum){
+                    DataUtil.currentOrder=0;
+                }
+                wordText.setText(DataUtil.getWordInstanceById(DataUtil.currentOrder).getWord());
+//                wordText.setText(Data.getWord(Data.getRandNum()));
 
             }
         });
-        tipsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                definitionText.setText(Data.getPron(Data.getRandNum()) + "\n" + Data.getwordDefine(Data.getRandNum()));
-            }
-        });
+//        tipsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                definitionText.setText(Data.getPron(Data.getRandNum()) + "\n" + Data.getwordDefine(Data.getRandNum()));
+//                definitionText.setText(DataUtil.getPronounce(DataUtil.cu));
+//            }
+//        });
     }
 
-    private void addWordIntoCollects(String word){
-        SharedPreferences collectBookPre = getActivity().getSharedPreferences("collectBook", Context.MODE_PRIVATE);
+    private void addWordIntoCollects(String word) {
+        SharedPreferences collectBookPre =
+                getActivity().getSharedPreferences("collectBook", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = collectBookPre.edit();
         Set<String> collects = collectBookPre.getStringSet("collects", null);
-        if (collects==null){
-            collects=new HashSet<String>();
+        if (collects == null) {
+            collects = new HashSet<String>();
         }
         Set<String> newCollects = new HashSet<String>(collects);
         newCollects.add(word);
 
-        editor.putStringSet("collects",newCollects);
+        editor.putStringSet("collects", newCollects);
         editor.apply();
 
     }

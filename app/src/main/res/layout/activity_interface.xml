@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".InterfaceActivity">
-
+<!--底部切换栏,app:menu 指定了菜单项文件。每项均由自己的tittle和icon-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"

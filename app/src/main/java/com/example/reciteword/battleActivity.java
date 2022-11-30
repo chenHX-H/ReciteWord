@@ -9,9 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.reciteword.dao.DataUtil;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class battleActivity extends AppCompatActivity {
     private Button choose1Button, choose2Button, choose3Button; // 3个单词按钮
@@ -91,11 +92,11 @@ public class battleActivity extends AppCompatActivity {
         if (isWin) {
             myScore += 10;
             //AI 加分；70%
-            if (getNum(10) <= AI_Score_Rate_InMyWin)
+            if (DataUtil.getRandNum(10) <= AI_Score_Rate_InMyWin)
                 youScore += 10;
             return;
         }
-        if (getNum(10) <= AI_Score_Rate_InMyFail)
+        if (DataUtil.getRandNum(10) <= AI_Score_Rate_InMyFail)
             youScore += 10;
 
         errorsWordList.add(word);
@@ -122,45 +123,36 @@ public class battleActivity extends AppCompatActivity {
 
 
     private void initWord() {
-        int rNum = getNum(90); //随机取一个单词作为正确答案
+        int rNum = DataUtil.getRandNum(DataUtil.currentWordNum); //随机取一个单词作为正确答案
         thisWordNum = rNum;
-        Boolean is=Data.getAll().isEmpty();
-        System.out.println("----------------test==="+String.valueOf(rNum)+"----"+Data.getAll().size()+String.valueOf(is)+"-----------------");
-
-
-        word = Data.getWord(rNum);
-        right_Opinion_Order = getNum(3); //随机出正确答案的选项位置
+//        word = Data.getWord(rNum);
+         word = DataUtil.getWordInstanceById(rNum).getWord();
+        right_Opinion_Order = DataUtil.getRandNum(3); //随机出正确答案的选项位置
         //将2个错误答案和1个正确答案，打乱顺序混淆填入。
         switch (right_Opinion_Order) {
             case 0:
-                definition1 = Data.getwordDefine(rNum);
-                definition2 = Data.getwordDefine(getNum(90));
-                definition3 = Data.getwordDefine(getNum(90));
+                definition1 = DataUtil.getWordInstanceById(rNum).getDefinition();
+                definition2 = DataUtil.getWordInstanceById(DataUtil.getRandNum(DataUtil.currentWordNum)).getDefinition();
+                definition3 = DataUtil.getWordInstanceById(DataUtil.getRandNum(DataUtil.currentWordNum)).getDefinition();
                 break;
             case 1:
-                definition1 = Data.getwordDefine(getNum(90));
-                definition2 = Data.getwordDefine(rNum);
-                definition3 = Data.getwordDefine(getNum(90));
+                definition1 = DataUtil.getWordInstanceById(DataUtil.getRandNum(DataUtil.currentWordNum)).getDefinition();
+                definition2 = DataUtil.getWordInstanceById(rNum).getDefinition();
+                definition3 = DataUtil.getWordInstanceById(DataUtil.getRandNum(DataUtil.currentWordNum)).getDefinition();
                 break;
             default:
-                definition1 = Data.getwordDefine(getNum(90));
-                definition2 = Data.getwordDefine(getNum(90));
-                definition3 = Data.getwordDefine(rNum);
+                definition1 = DataUtil.getWordInstanceById(DataUtil.getRandNum(DataUtil.currentWordNum)).getDefinition();
+                definition2 = DataUtil.getWordInstanceById(DataUtil.getRandNum(DataUtil.currentWordNum)).getDefinition();
+                definition3 = DataUtil.getWordInstanceById(rNum).getDefinition();
                 break;
         }
         choose1Button.setText(definition1);
         choose2Button.setText(definition2);
         choose3Button.setText(definition3);
-        wordFightText.setText(word);
+        wordFightText.setText(this.word);
         user1Score.setText("得分:" + myScore);
         user2Score.setText("得分:" + youScore);
     }
 
-    private static int getNum(int endNum) {
-        if (endNum > 0) {
-            Random random = new Random();
-            return random.nextInt(endNum);
-        }
-        return 0;
-    }
+
 }

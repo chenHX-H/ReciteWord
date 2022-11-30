@@ -25,11 +25,19 @@ public class InterfaceActivity extends AppCompatActivity {
         if(actionBar != null){
             actionBar.hide();
         }
+        //定制配置类，为其指定四个目的地fragment
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_recite, R.id.navigation_review, R.id.navigation_fight,
                 R.id.navigation_wrong).build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+        //用xml里的fragment容器构建导航控制器
+        NavController navController =
+                Navigation.findNavController(this, R.id.nav_host_fragment);
+
+        //为导航控制器设置配置类
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+        //关联NavigationView和导航控制器
         NavigationUI.setupWithNavController(navView, navController);
         System.out.println("there is Interface");
     }
