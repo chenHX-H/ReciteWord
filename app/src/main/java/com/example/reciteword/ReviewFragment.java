@@ -31,7 +31,18 @@ public class ReviewFragment extends Fragment {
     MediaPlayer m1=null,m2=null;
     Switch sb = null;
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (m1!=null){
+            m1.setVolume(0,0);
+        }
+        if (m2!=null){
+            m2.setVolume(0,0);
+        }
 
+
+    }
 
     public static ReviewFragment newInstance() {
         return new ReviewFragment();
@@ -41,6 +52,16 @@ public class ReviewFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         System.out.println("-----------onCreateView");
+        if (m1!=null){
+            m1.setVolume(1,1);
+            m1.reset();
+            m1.release();
+        }
+        if (m2!=null){
+            m2.setVolume(1,1);
+            m2.reset();
+            m2.release();
+        }
 
         return inflater.inflate(R.layout.fragment_review, container, false);
     }
