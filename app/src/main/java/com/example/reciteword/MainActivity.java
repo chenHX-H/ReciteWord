@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -28,10 +29,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Data.initWordList();
+
+        /*****开始选择单词书，并解压数据*****/
+        //将解压好的单词数据，存储进sqlite
         DataUtil.init(getApplicationContext());
-        Intent intent = new Intent(MainActivity.this,InterfaceActivity.class);
+        DataUtil.MainAcivity=this;
+        Intent intent = new Intent(MainActivity.this, InterfaceActivity.class);
         startActivity(intent);
+
     }
 
 }

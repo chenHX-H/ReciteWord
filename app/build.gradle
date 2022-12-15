@@ -10,9 +10,9 @@ android {
         applicationId "com.example.reciteword"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 5
-        versionName "5"
-
+        versionCode 6
+        versionName "6.2"
+        //自动读取asset目录下文件出现异常（多出文件），采用手动方式，应付过去。
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -51,4 +51,6 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpcore:4.4.4'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.google.code.gson:gson:2.10'
+    implementation 'org.apache.commons:commons-compress:1.20'
+
 }

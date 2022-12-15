@@ -1,17 +1,22 @@
 package com.example.reciteword;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.reciteword.dao.DataUtil;
 
@@ -25,10 +30,11 @@ import java.util.Set;
 public class reciteFragment extends Fragment {
 
 
-    private Button knowButton, unknowButton;
+    private Button knowButton, unknowButton,bookButton;
     private ImageButton tipsButton;
     private TextView wordText, definitionText;
     private boolean NoKnowWord = false;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +44,7 @@ public class reciteFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        bookButton= (Button)getActivity().findViewById(R.id.bookButton);
         knowButton = (Button) getActivity().findViewById(R.id.knowButton);
         unknowButton = (Button) getActivity().findViewById(R.id.unknowButton);
 //        tipsButton = (ImageButton) getActivity().findViewById(R.id.tipsButton);
@@ -47,6 +54,13 @@ public class reciteFragment extends Fragment {
         wordText.setText(DataUtil.getWordInstanceById(DataUtil.currentOrder).getWord());
         System.out.println("测试测试:"+wordText.getText().toString());
         definitionText.setText("");
+
+        bookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bookButtonOnClick(view);
+            }
+        });
 
         knowButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,4 +134,13 @@ public class reciteFragment extends Fragment {
         editor.apply();
 
     }
+
+    private void bookButtonOnClick(View v){
+        Log.i("BookButton","True");
+        FragmentActivity activity = getActivity();
+        SeleBookFragDialog dialog = new SeleBookFragDialog(activity);
+
+        dialog.show(getParentFragmentManager(),"BookFragment");
+    }
+
 }

@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import com.example.reciteword.dao.DataUtil;
 
+import java.io.File;
+import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -215,8 +217,12 @@ public class ReviewFragment extends Fragment {
         checkVolum();
         AssetFileDescriptor fd = null;
         try {
-            fd = getResources().getAssets().openFd("audio/" + word + ".mp3");
-            mediaPlayer_audio.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
+//            fd = getResources().getAssets().openFd("audio/" + word + ".mp3");
+            String path=getContext().getFilesDir() + "/data/audio/" + word + ".mp3";
+
+//            mediaPlayer_audio.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
+            mediaPlayer_audio.setDataSource(path);
+
             mediaPlayer_audio.prepare();
         } catch (IOException e) {
             e.printStackTrace();
@@ -232,8 +238,11 @@ public class ReviewFragment extends Fragment {
         AssetFileDescriptor fd = null;
         try {
             if(isAdded()){
-                fd = getResources().getAssets().openFd("sentence_audio/" + word + ".mp3");
-                mediaPlayer_sentence.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
+//                fd = getResources().getAssets().openFd("sentence_audio/" + word + ".mp3");
+                String path=getContext().getFilesDir() + "/data/sentence_audio/" + word + ".mp3";
+
+//                mediaPlayer_sentence.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
+                mediaPlayer_sentence.setDataSource(path);
                 mediaPlayer_sentence.prepare();
             }
 

@@ -2,10 +2,7 @@ package com.example.reciteword;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,9 +12,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.reciteword.adapter.BookAdapter;
 import com.example.reciteword.adapter.ErrorAdapter;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,7 +46,7 @@ public class pkResultActivity extends AppCompatActivity {
         System.out.println("*********************" + errorsList);
         //创建适配器，绑定数据源和控件UI布局项
 
-        ErrorAdapter adapter = new ErrorAdapter(this, R.layout.error_item, errorsList);
+        BookAdapter adapter = new BookAdapter(this, R.layout.error_item, errorsList);
         ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(adapter);
 
